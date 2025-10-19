@@ -2,15 +2,10 @@
 import type { ApisauceInstance } from "apisauce";
 
 import type { HandleErrorFn, SuccessResponse } from "../api";
-import { createApiCallWithHandleError, defaultResultConverter } from "../api";
+import { createApiCall, defaultResultConverter } from "../api";
 
 export const createFaucetDeposit = (api: ApisauceInstance, handleErrorFn: HandleErrorFn) =>
-  createApiCallWithHandleError<FaucetDepositBody, SuccessResponse>(
-    api.post,
-    "/faucet",
-    defaultResultConverter,
-    handleErrorFn
-  );
+  createApiCall<FaucetDepositBody, SuccessResponse>(api.post, "/faucet", defaultResultConverter, handleErrorFn);
 
 export interface FaucetDepositBody {
   user_address: string;
@@ -23,10 +18,10 @@ export interface FaucetDepositBody {
 import type { ApisauceInstance } from "apisauce";
 
 import type { HandleErrorFn } from "../../api";
-import { createApiCallWithHandleError, defaultResultConverter } from "../../api";
+import { createApiCall, defaultResultConverter } from "../../api";
 
 export const createGetOrderBook = (api: ApisauceInstance, handleErrorFn: HandleErrorFn) =>
-  createApiCallWithHandleError<undefined, GetOrderBookResult, { product_id: string }>(
+  createApiCall<undefined, GetOrderBookResult, { product_id: string }>(
     api.get,
     (pathParams) => `/products/${pathParams?.product_id}/orderbook`,
     defaultResultConverter,
@@ -35,16 +30,7 @@ export const createGetOrderBook = (api: ApisauceInstance, handleErrorFn: HandleE
 
 export interface GetOrderBookResult {
   product_id: string;
-  book: {
-    asks: BookItem[];
-    bids: BookItem[];
-  };
+  book: BookItem[];
   timestamp: string;
-  gsn: string;
-}
-
-export interface BookItem {
-  price: string;
-  size: string;
 }
 ```
