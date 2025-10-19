@@ -4786,7 +4786,7 @@ regexp.prototype.flags@^1.5.1, regexp.prototype.flags@^1.5.3, regexp.prototype.f
     gopd "^1.2.0"
     set-function-name "^2.0.2"
 
-release-it@^19.0.5:
+release-it@19.0.5:
   version "19.0.5"
   resolved "https://registry.yarnpkg.com/release-it/-/release-it-19.0.5.tgz#55325968069831b0bd0cb37d4587a4f9ca628b42"
   integrity sha512-bYlUKC0TQroBKi8jQUeoxLHql4d9Fx/2EQLHPKUobXTNSiTS2WY8vlgdHZRhRjVEMyAWwyadJVKfFZnRJuRn4Q==
