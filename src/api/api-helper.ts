@@ -11,7 +11,7 @@ export type HandleErrorFn = <E, F = E>(
 export type HandleErrorFnOptions<T, U = T> = HandleApiOptions<T, U>;
 
 export const createApiCall =
-  <Params, Result, PathParams = undefined, ConvertedResult = Result, ErrorResult = Result>(
+  <Params, Result, ConvertedResult = Result, PathParams = undefined, ErrorResult = Result>(
     apiCall: <T, E>(url: string, params?: Params, axiosConfig?: AxiosRequestConfig) => Promise<ApiResponse<T, E>>,
     url: string | ((pathParams: PathParams | undefined) => string),
     convertResult: (data: Result) => ConvertedResult,
