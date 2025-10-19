@@ -14,7 +14,7 @@
     "release": "release-it"
   },
   "dependencies": {
-    "apisauce": "3.0.1",
+    "apisauce": "3.2.0",
     "axios": "1.9.0"
   },
   "devDependencies": {
