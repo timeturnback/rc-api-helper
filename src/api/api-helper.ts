@@ -1,45 +1,20 @@
 import type { ApiResponse, PROBLEM_CODE } from "apisauce";
 import type { AxiosRequestConfig } from "axios";
 
-import type { MetaResponse } from "./api-types";
-
 export type { ApiResponse } from "apisauce";
 
-export interface ApiError<U> {
-  message: string | undefined;
-  value?: PROBLEM_CODE;
-  code?: number;
-  data?: U;
-}
-
-export const defaultResultConverter = <T>(data: MetaResponse<T>): T => data.data;
-
-export const createApiCall =
-  <Params, Result, ConvertedResult = Result, ErrorResult = Result>(
-    apiCall: <T, E>(url: string, params?: Params, axiosConfig?: AxiosRequestConfig) => Promise<ApiResponse<T, E>>,
-    url: string,
-    convertResult: (data: MetaResponse<Result>) => ConvertedResult
-  ): ((params?: Params, axiosConfig?: AxiosRequestConfig) => Promise<ApiResponse<ConvertedResult, ErrorResult>>) =>
-  async (params, axiosConfig) => {
-    const res = await apiCall<MetaResponse<Result>, ErrorResult>(url, params, axiosConfig);
-    const convertedRes = res.ok
-      ? {
-          ...res,
-          data: res.data ? convertResult(res.data) : undefined,
-        }
-      : res;
-    return convertedRes;
-  };
 export type HandleErrorFn = <E, F = E>(
   response: ApiResponse<E, F>,
   options?: HandleApiOptions<E, F>
 ) => HandleApiResult<E, F>;
+
 export type HandleErrorFnOptions<T, U = T> = HandleApiOptions<T, U>;
-export const createApiCallWithHandleError =
+
+export const createApiCall =
   <Params, Result, PathParams = undefined, ConvertedResult = Result, ErrorResult = Result>(
     apiCall: <T, E>(url: string, params?: Params, axiosConfig?: AxiosRequestConfig) => Promise<ApiResponse<T, E>>,
     url: string | ((pathParams: PathParams | undefined) => string),
-    convertResult: (data: MetaResponse<Result>) => ConvertedResult,
+    convertResult: (data: Result) => ConvertedResult,
     handleErrorFn: <E, F>(response: ApiResponse<E, F>, options?: HandleApiOptions<E, F>) => HandleApiResult<E, F>
   ): ((
     params?: Params,
@@ -52,7 +27,7 @@ export const createApiCallWithHandleError =
   ) => Promise<HandleApiResult<ConvertedResult, ErrorResult>>) =>
   async (params, showToast, config) => {
     const { pathParams, axiosConfig, options } = config || {};
-    const res = await apiCall<MetaResponse<Result>, ErrorResult>(
+    const res = await apiCall<Result, ErrorResult>(
       typeof url === "string" ? url : url(pathParams),
       params,
       axiosConfig
@@ -73,6 +48,12 @@ export interface ApiResponseErrorData {
   };
 }
 
+export interface ApiError<U> {
+  message: string | undefined;
+  value?: PROBLEM_CODE;
+  code?: number;
+  data?: U;
+}
 export interface HandleApiResult<T, U> {
   result: T | undefined;
   error: ApiError<U> | undefined;
