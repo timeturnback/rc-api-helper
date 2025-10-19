@@ -5,6 +5,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup --config",
+    "prepack": "rollup --config",
     "dev": "rollup --config --watch",
     "test": "jest --watch",
     "lint": "eslint .",
